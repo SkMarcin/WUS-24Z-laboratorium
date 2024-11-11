@@ -1,4 +1,4 @@
-{
+  {
     "resource_group_name": "config-1-rg",
     "network_security_groups": {
       "nsg1_db": {
@@ -86,29 +86,29 @@
       }
     },
     "components": {
-      "db_master": {
+      "c1_db_master": {
         "type": "db_master",
         "vm_name": "vm-1-db-master",
         "port": 3306
       },
-      "backend": {
+      "c2_backend": {
         "type": "backend",
         "vm_name": "vm-2-backend",
         "port": 8001,
         "related": [
           {
-            "component": "db_master",
+            "component": "c1_db_master",
             "vm": "db_master"
           }
         ]
       },
-      "frontend": {
+      "c3_frontend": {
         "type": "frontend",
         "vm_name": "vm-3-frontend",
         "port": 8000,
         "related": [
           {
-            "component": "backend",
+            "component": "c2_backend",
             "vm": "backend"
           }
         ]
