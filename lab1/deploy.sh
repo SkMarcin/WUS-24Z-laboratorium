@@ -133,3 +133,17 @@ for component in $components; do
       --resource-group "$resource_group_name" \
       --scripts "@./frontend.sh" \
       --parameters "$backend_ip" "$backend_port" "$port"
+    
+  elif [ "$type" == "db_slave" ]; then
+      db_master_component=$(jq -r ".components[\"$component\"].related[0].component" "$JSON_FILE")
+      db_master_vm=$(jq -r ".components[\"$component\"].related[0].vm" "$JSON_FILE")
+
+      db_master_port=$(jq -r ".components[\"$db_master_component\"].port" "$JSON_FILE")
+      db_master_ip=$(jq -r ".vms[\"$db_master_vm\"].IP" "$JSON_FILE")
+
+      az vm run-command invoke \
+          --command-id RunShellScript \
+          --name "$vm_name" \
+          --resource-group "$resource_group_name" \
+          --scripts "@./db_slave.sh" \
+          --parameters "$port" "$db_master_ip" "$db_master_port"
