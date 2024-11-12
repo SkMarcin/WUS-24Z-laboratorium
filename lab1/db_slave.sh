@@ -27,9 +27,9 @@ wget https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-rest/re
 sed -i '1 i\USE petclinic;' ./schema.sql  # Add 'USE petclinic;' to the top of schema.sql
 cat schema.sql | sudo mysql -f
 
-wget https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-rest/refs/heads/master/src/main/resources/db/mysql/data.sql
-sed -i '1 i\USE petclinic;' ./data.sql  # Add 'USE petclinic;' to the top of data.sql
-cat data.sql | sudo mysql -f
+# wget https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-rest/refs/heads/master/src/main/resources/db/mysql/data.sql
+# sed -i '1 i\USE petclinic;' ./data.sql  # Add 'USE petclinic;' to the top of data.sql
+# cat data.sql | sudo mysql -f
 
 sudo mysql -v -e "UNLOCK TABLES;"
 
