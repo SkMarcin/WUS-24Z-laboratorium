@@ -1,0 +1,161 @@
+{
+    "resource_group_name": "config-3-rg",
+    "network_security_groups": {
+      "nsg1_db": {
+        "name": "nsg-1-db",
+        "rule": {
+          "name": "nsg-db",
+          "protocol": "Tcp",
+          "priority": 1000,
+          "dst_addr_pref": "*",
+          "dst_port_ranges": 3306,
+          "src_addr_pref": "10.0.0.0/16",
+          "src_port_ranges": "*",
+          "access": "allow"
+        }
+      },
+      "nsg2_backend": {
+        "name": "nsg-2-backend",
+        "rule": {
+          "name": "nsg-backend",
+          "protocol": "Tcp",
+          "priority": 1000,
+          "dst_addr_pref": "*",
+          "dst_port_ranges": "8000-8001",
+          "src_addr_pref": "*",
+          "src_port_ranges": "*",
+          "access": "allow"
+        }
+      },
+      "nsg3_frontend_balancer": {
+        "name": "nsg-3-frontend-balancer",
+        "rule": {
+          "name": "nsg-frontend-balancer",
+          "protocol": "Tcp",
+          "priority": 1000,
+          "dst_addr_pref": "*",
+          "dst_port_ranges": "8002-8003",
+          "src_addr_pref": "*",
+          "src_port_ranges": "*",
+          "access": "allow"
+        }
+      }
+    },
+    "subnets": {
+      "subnet1_db": {
+        "name": "subnet-1-db",
+        "addr_pref": "10.0.1.0/24",
+        "nsg": "nsg-1-db"
+      },
+      "subnet2_backend": {
+        "name": "subnet-2-backend",
+        "addr_pref": "10.0.2.0/24",
+        "nsg": "nsg-2-backend"
+      },
+      "subnet3_frontend_balancer": {
+        "name": "subnet-3-frontend-balancer",
+        "addr_pref": "10.0.3.0/24",
+        "nsg": "nsg-3-frontend-balancer"
+      }
+    },
+    "public_ips": [
+      "backend_ip",
+      "frontend_balancer_ip"
+    ],
+    "vms": {
+      "db_master": {
+        "subnet": "subnet-1-db",
+        "nsg": "nsg-1-db",
+        "public_ip": "",
+        "name": "vm-1-db-master",
+        "IP": "10.0.1.20"
+      },
+      "db_slave": {
+        "subnet": "subnet-1-db",
+        "nsg": "nsg-1-db",
+        "public_ip": "",
+        "name": "vm-2-db-slave",
+        "IP": "10.0.1.21"
+      },
+      "backend": {
+        "subnet": "subnet-2-backend",
+        "nsg": "nsg-2-backend",
+        "public_ip": "backend_ip",
+        "name": "vm-3-backend",
+        "IP": "10.0.2.20"
+      },
+      "frontend_balancer": {
+        "subnet": "subnet-3-frontend-balancer",
+        "nsg": "nsg-3-frontend-balancer",
+        "public_ip": "frontend_balancer_ip",
+        "name": "vm-4-frontend-balancer",
+        "IP": "10.0.3.20"
+      }
+    },
+    "components": {
+      "c1_db_master": {
+        "type": "db_master",
+        "vm_name": "vm-1-db-master",
+        "port": 3306
+      },
+      "c2_db_slave": {
+        "type": "db_slave",
+        "vm_name": "vm-2-db-slave",
+        "port": 3306,
+        "related": [
+          {
+            "component": "c1_db_master",
+            "vm": "db_master"
+          }
+        ]
+      },
+      "c3_backend": {
+        "type": "backend",
+        "vm_name": "vm-3-backend",
+        "port": 8000,
+        "related": [
+          {
+            "component": "c1_db_master",
+            "vm": "db_master"
+          }
+        ]
+      },
+      "c4_backend": {
+        "type": "backend",
+        "vm_name": "vm-3-backend",
+        "port": 8001,
+        "related": [
+          {
+            "component": "c1_db_master",
+            "vm": "db_master"
+          }
+        ]
+      },
+      "c5_load_balancer": {
+        "type": "load-balancer",
+        "vm_name": "vm-4-frontend-balancer",
+        "port": 8002,
+        "related": [
+          {
+            "component": "c3_backend",
+            "vm": "backend"
+          },
+          {
+            "component": "c4_backend",
+            "vm": "backend"
+          }
+        ]
+      },
+      "c6_frontend": {
+        "type": "frontend",
+        "vm_name": "vm-4-frontend-balancer",
+        "port": 8003,
+        "related": [
+          {
+            "component": "c5_load_balancer",
+            "vm": "frontend_balancer"
+          }
+        ]
+      }
+    }
+  }
