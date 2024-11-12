@@ -168,6 +168,7 @@ for component in $components; do
           --resource-group "$resource_group_name" \
           --scripts "@./load_balancer.sh" \
           --parameters "$backend1_ip" "$backend1_port" "$backend2_ip" "$backend2_port" "$load_balancer_port"
-
+  else
+      echo "Unrecognised type: $type"
   fi
 done

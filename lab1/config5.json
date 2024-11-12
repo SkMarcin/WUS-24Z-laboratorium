@@ -132,7 +132,7 @@
         ]
       },
       "c5_load_balancer": {
-        "type": "load-balancer",
+        "type": "load_balancer",
         "vm_name": "vm-4-frontend-balancer",
         "port": 8002,
         "related": [
