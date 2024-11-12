@@ -13,11 +13,6 @@ sudo apt upgrade -y
 sudo apt install -y nginx
 
 cat << EOF > /etc/nginx/sites-enabled/load_balancer
-http {
-   log_format upstreamlog '$server_name to: $upstream_addr {$request} '
-   'upstream_response_time $upstream_response_time'
-   ' request_time $request_time';
-}
 
 upstream backend {
     server $backend1_ip:$backend1_port;
@@ -32,6 +27,7 @@ server {
         include proxy_params;
     }
 }
+
 EOF
 
 sudo nginx -s reload

@@ -157,8 +157,8 @@ for component in $components; do
 
       backend1_vm=$(jq -r ".components[\"$component\"].related[0].vm" "$JSON_FILE")
       backend2_vm=$(jq -r ".components[\"$component\"].related[1].vm" "$JSON_FILE")
-      backend1_ip=$(jq -r ".vms[\"$backend1_component\"].IP" "$JSON_FILE")
-      backend2_ip=$(jq -r ".vms[\"$backend2_component\"].IP" "$JSON_FILE")
+      backend1_ip=$(jq -r ".vms[\"$backend1_vm\"].IP" "$JSON_FILE")
+      backend2_ip=$(jq -r ".vms[\"$backend2_vm\"].IP" "$JSON_FILE")
 
       load_balancer_port=$(jq -r ".components[\"$component\"].port" "$JSON_FILE")
 
