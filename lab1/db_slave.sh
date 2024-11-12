@@ -33,6 +33,6 @@ cat data.sql | sudo mysql -f
 
 sudo mysql -v -e "UNLOCK TABLES;" 
 
-sudo mysql -v -e "CHANGE REPLICATION SOURCE TO SOURCE_HOST='$master_address', SOURCE_PORT=$master_port, SOURCE_USER='petclinic', SOURCE_PASSWORD='petclinic';" 
+sudo mysql -v -e "CHANGE REPLICATION SOURCE TO SOURCE_HOST='$master_address', SOURCE_PORT=$master_port, SOURCE_USER='replica_petclinic', SOURCE_PASSWORD='replica_petclinic';"
 sudo mysql -v -e "START SLAVE;"
 

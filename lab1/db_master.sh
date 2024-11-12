@@ -29,3 +29,7 @@ sed -i '1 i\USE petclinic;' ./data.sql  # Add 'USE petclinic;' to the top of dat
 cat data.sql | sudo mysql -f
 
 sudo mysql -v -e "UNLOCK TABLES;"
+
+sudo mysql -e "CREATE USER 'replica_petclinic'@'%' IDENTIFIED BY 'replica_petclinic';"
+sudo mysql -e "GRANT REPLICATION SLAVE ON *.* TO 'replica_petclinic'@'%';"
+sudo mysql -e "FLUSH PRIVILEGES;"
