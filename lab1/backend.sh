@@ -3,8 +3,11 @@
 backend_port=$1
 db_ip=$2
 db_port=$3
+folder_path=$4
 
 cd /root
+mkdir $folder_path
+cd $folder_path
 sudo apt update
 sudo apt upgrade -y
 

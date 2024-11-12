@@ -120,11 +120,12 @@ for component in $components; do
       --name "$vm_name" \
       --resource-group "$resource_group_name" \
       --scripts "@./backend.sh" \
-      --parameters "$port" "$db_ip" "$db_port"
+      --parameters "$port" "$db_ip" "$db_port" "$component"
 
   elif [ "$type" == "frontend" ]; then
     backend_component=$(jq -r ".components[\"$component\"].related[0].component" "$JSON_FILE")
-    backend_ip=$(az network public-ip show --resource-group "$resource_group_name" --name "backend_ip" --query "ipAddress" --output tsv)
+    backend_vm=$(jq -r ".components[\"$component\"].related[0].vm" "$JSON_FILE")
+    backend_ip=$(jq -r ".vms[\"$backend_vm\"].IP" "$JSON_FILE")
     backend_port=$(jq -r ".components[\"$backend_component\"].port" "$JSON_FILE")
 
     az vm run-command invoke \
@@ -151,10 +152,14 @@ for component in $components; do
   elif [ "$type" == "load_balancer" ]; then
       backend1_component=$(jq -r ".components[\"$component\"].related[0].component" "$JSON_FILE")
       backend2_component=$(jq -r ".components[\"$component\"].related[1].component" "$JSON_FILE")
-      backend1_ip=$(jq -r ".vms[\"$backend1_component\"].IP" "$JSON_FILE")
       backend1_port=$(jq -r ".components[\"$backend1_component\"].port" "$JSON_FILE")
-      backend2_ip=$(jq -r ".vms[\"$backend2_component\"].IP" "$JSON_FILE")
       backend2_port=$(jq -r ".components[\"$backend2_component\"].port" "$JSON_FILE")
+
+      backend1_vm=$(jq -r ".components[\"$component\"].related[0].vm" "$JSON_FILE")
+      backend2_vm=$(jq -r ".components[\"$component\"].related[1].vm" "$JSON_FILE")
+      backend1_ip=$(jq -r ".vms[\"$backend1_component\"].IP" "$JSON_FILE")
+      backend2_ip=$(jq -r ".vms[\"$backend2_component\"].IP" "$JSON_FILE")
+
       load_balancer_port=$(jq -r ".components[\"$component\"].port" "$JSON_FILE")
 
       az vm run-command invoke \

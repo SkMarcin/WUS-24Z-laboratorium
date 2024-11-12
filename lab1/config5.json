@@ -1,5 +1,5 @@
 {
-    "resource_group_name": "config-3-rg",
+    "resource_group_name": "config-5-rg",
     "network_security_groups": {
       "nsg1_db": {
         "name": "nsg-1-db",
