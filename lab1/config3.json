@@ -50,7 +50,7 @@
       "subnet2_backend": {
         "name": "subnet-2-backend",
         "addr_pref": "10.0.2.0/24",
-        "nsg": "nsg-3-backend"
+        "nsg": "nsg-2-backend"
       },
       "subnet3_frontend": {
         "name": "subnet-3-frontend",

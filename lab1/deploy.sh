@@ -147,3 +147,5 @@ for component in $components; do
           --resource-group "$resource_group_name" \
           --scripts "@./db_slave.sh" \
           --parameters "$port" "$db_master_ip" "$db_master_port"
+  fi
+done
