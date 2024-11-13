@@ -125,7 +125,7 @@ for component in $components; do
   elif [ "$type" == "frontend" ]; then
     backend_component=$(jq -r ".components[\"$component\"].related[0].component" "$JSON_FILE")
     backend_vm=$(jq -r ".components[\"$component\"].related[0].vm" "$JSON_FILE")
-    backend_ip=$(jq -r ".vms[\"$backend_vm\"].IP" "$JSON_FILE")
+    backend_ip=$(jq -r ".vms[\"$backend_vm\"].public_ip" "$JSON_FILE")
     backend_port=$(jq -r ".components[\"$backend_component\"].port" "$JSON_FILE")
 
     az vm run-command invoke \
