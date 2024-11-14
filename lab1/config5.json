@@ -59,7 +59,6 @@
       }
     },
     "public_ips": [
-      "backend_ip",
       "frontend_balancer_ip"
     ],
     "vms": {
@@ -80,7 +79,7 @@
       "backend": {
         "subnet": "subnet-2-backend",
         "nsg": "nsg-2-backend",
-        "public_ip": "backend_ip",
+        "public_ip": "",
         "name": "vm-3-backend",
         "IP": "10.0.2.20"
       },
