@@ -1,0 +1,117 @@
+  {
+    "resource_group_name": "config-1-rg",
+    "network_security_groups": {
+      "nsg1_db": {
+        "name": "nsg-1-db",
+        "rule": {
+          "name": "nsg-db",
+          "protocol": "Tcp",
+          "priority": 1000,
+          "dst_addr_pref": "*",
+          "dst_port_ranges": 3306,
+          "src_addr_pref": "10.0.0.0/16",
+          "src_port_ranges": "*",
+          "access": "allow"
+        }
+      },
+      "nsg2_backend": {
+        "name": "nsg-2-backend",
+        "rule": {
+          "name": "nsg-backend",
+          "protocol": "Tcp",
+          "priority": 1000,
+          "dst_addr_pref": "*",
+          "dst_port_ranges": 8001,
+          "src_addr_pref": "*",
+          "src_port_ranges": "*",
+          "access": "allow"
+        }
+      },
+      "nsg3_frontend": {
+        "name": "nsg-3-frontend",
+        "rule": {
+          "name": "nsg-frontend",
+          "protocol": "Tcp",
+          "priority": 1000,
+          "dst_addr_pref": "*",
+          "dst_port_ranges": 8000,
+          "src_addr_pref": "*",
+          "src_port_ranges": "*",
+          "access": "allow"
+        }
+      }
+    },
+    "subnets": {
+      "subnet1_db": {
+        "name": "subnet-1-db",
+        "addr_pref": "10.0.1.0/24",
+        "nsg": "nsg-1-db"
+      },
+      "subnet2_backend": {
+        "name": "subnet-2-backend",
+        "addr_pref": "10.0.2.0/24",
+        "nsg": "nsg-2-backend"
+      },
+      "subnet3_frontend": {
+        "name": "subnet-3-frontend",
+        "addr_pref": "10.0.3.0/24",
+        "nsg": "nsg-3-frontend"
+      }
+    },
+    "public_ips": [
+      "backend_ip",
+      "frontend_ip"
+    ],
+    "vms": {
+      "db_master": {
+        "subnet": "subnet-1-db",
+        "nsg": "nsg-1-db",
+        "public_ip": "",
+        "name": "vm-1-db-master",
+        "IP": "10.0.1.20"
+      },
+      "backend": {
+        "subnet": "subnet-2-backend",
+        "nsg": "nsg-2-backend",
+        "public_ip": "backend_ip",
+        "name": "vm-2-backend",
+        "IP": "10.0.2.20"
+      },
+      "frontend": {
+        "subnet": "subnet-3-frontend",
+        "nsg": "nsg-3-frontend",
+        "public_ip": "frontend_ip",
+        "name": "vm-3-frontend",
+        "IP": "10.0.3.20"
+      }
+    },
+    "components": {
+      "c1_db_master": {
+        "type": "db_master",
+        "vm_name": "vm-1-db-master",
+        "port": 3306
+      },
+      "c2_backend": {
+        "type": "backend",
+        "vm_name": "vm-2-backend",
+        "port": 8001,
+        "related": [
+          {
+            "component": "c1_db_master",
+            "vm": "db_master"
+          }
+        ]
+      },
+      "c3_frontend": {
+        "type": "frontend",
+        "vm_name": "vm-3-frontend",
+        "port": 8000,
+        "related": [
+          {
+            "component": "c2_backend",
+            "vm": "backend"
+          }
+        ]
+      }
+    }
+  }
