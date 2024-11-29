@@ -70,8 +70,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.location
   size                = "Standard_DS1_v2"
-  admin_username      = "root"
-  admin_password      = "root"
+  admin_username      = "Admin123"
+  admin_password      = "Admin123"
 
   os_disk {
     name              = "${each.value.name}-osdisk"
