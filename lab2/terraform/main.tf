@@ -40,6 +40,14 @@ resource "azurerm_subnet" "subnet" {
   network_security_group_id = azurerm_network_security_group.nsg[each.value.nsg].id
 }
 
+resource "azurerm_public_ip" "public_ip" {
+  for_each = { for ip in var.public_ips : ip => ip }
+  name                = each.key
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Dynamic"
+}
+
 resource "azurerm_network_interface" "nic" {
   for_each = var.vms
 
@@ -63,6 +71,16 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = each.value.name
   resource_group_name = azurerm_resource_group.rg.name
   location            = var.location
+  size                = "Standard_DS1_v2"
+  admin_username      = "root"
+  admin_password      = "root"
+
+  os_disk {
+    name              = "${each.value.name}-osdisk"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
 
   network_interface_ids = [azurerm_network_interface.nic[each.key].id]
 
