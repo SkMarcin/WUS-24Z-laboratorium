@@ -5,6 +5,37 @@ variable "location" {
 }
 
 variable "resource_group_name" {
-  default = "my-resource-group"
+  type = string
 }
 
+variable "network_security_groups" {
+  type = map(object({
+    name       = string
+    rule_name  = string
+    protocol   = string
+    priority   = number
+    dst_addr   = string
+    dst_port   = string
+    src_addr   = string
+    src_port   = string
+    access     = string
+  }))
+}
+
+variable "subnets" {
+  type = map(object({
+    name       = string
+    addr_pref  = string
+    nsg        = string
+  }))
+}
+
+variable "vms" {
+  type = map(object({
+    subnet    = string
+    nsg       = string
+    public_ip = string
+    name      = string
+    ip        = string
+  }))
+}
