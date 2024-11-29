@@ -76,8 +76,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   os_disk {
     name              = "${each.value.name}-osdisk"
     caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+    storage_account_type = "Standard_LRS"
   }
 
   network_interface_ids = [azurerm_network_interface.nic[each.key].id]
