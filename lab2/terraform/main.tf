@@ -12,6 +12,7 @@ resource "azurerm_network_security_group" "nsg" {
 
   security_rule {
     name                       = each.value.rule_name
+    direction                  = each.value.direction
     protocol                   = each.value.protocol
     priority                   = each.value.priority
     destination_address_prefix = each.value.dst_addr
@@ -36,6 +37,7 @@ resource "azurerm_subnet" "subnet" {
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = [each.value.addr_pref]
+  #  network_security_group_id = azurerm_network_security_group.nsg[each.value.nsg].id  # may be important idk
 }
 
 resource "azurerm_public_ip" "public_ip" {
@@ -55,10 +57,9 @@ resource "azurerm_network_interface" "nic" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.[each.value.subnet].id
+    subnet_id                     = azurerm_subnet.subnet[each.value.subnet].id
     private_ip_address_allocation = "Static"
     private_ip_address            = each.value.ip
-
     public_ip_address_id = each.value.public_ip != "" ? azurerm_public_ip.public_ip[each.value.public_ip].id : null
   }
 }

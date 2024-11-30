@@ -59,21 +59,21 @@ subnets = {
 
 vms = {
   db_master = {
-    subnet    = "subnet-1-db"
+    subnet    = "subnet1_db"
     nsg       = "nsg-1-db"
     public_ip = ""
     name      = "vm-1-db-master"
     ip        = "10.0.1.20"
   }
   backend = {
-    subnet    = "subnet-2-backend"
+    subnet    = "subnet2_backend"
     nsg       = "nsg-2-backend"
     public_ip = "backend_ip"
     name      = "vm-2-backend"
     ip        = "10.0.2.20"
   }
   frontend = {
-    subnet    = "subnet-3-frontend"
+    subnet    = "subnet3_frontend"
     nsg       = "nsg-3-frontend"
     public_ip = "frontend_ip"
     name      = "vm-3-frontend"
