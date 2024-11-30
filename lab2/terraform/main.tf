@@ -69,10 +69,14 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   name                = each.value.name
   resource_group_name = azurerm_resource_group.rg.name
-  location            = var.location
+  location            = azurerm_resource_group.rg.location
   size                = "Standard_DS1_v2"
   admin_username      = "Admin123"
-  admin_password      = "Admin123"
+
+  admin_ssh_key {
+    username   = var.username
+    public_key = azapi_resource_action.ssh_public_key_gen.output.publicKey
+  }
 
   os_disk {
     name              = "${each.value.name}-osdisk"
