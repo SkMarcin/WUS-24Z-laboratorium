@@ -74,7 +74,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   admin_username      = "Admin123"
 
   admin_ssh_key {
-    username   = var.username
+    username   = "Admin123"
     public_key = azapi_resource_action.ssh_public_key_gen.output.publicKey
   }
 
@@ -88,8 +88,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   source_image_reference {
   publisher = "Canonical"
-  offer     = "UbuntuServer"
-  sku       = "24.04-LTS"
+  offer     = "ubuntu-24_04-lts"
+  sku       = "server"
   version   = "latest"
 }
 }
