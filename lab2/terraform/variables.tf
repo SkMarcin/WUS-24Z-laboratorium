@@ -12,6 +12,7 @@ variable "network_security_groups" {
   type = map(object({
     name       = string
     rule_name  = string
+    direction  = string
     protocol   = string
     priority   = number
     dst_addr   = string

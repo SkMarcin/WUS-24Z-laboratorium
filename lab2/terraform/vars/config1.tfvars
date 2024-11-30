@@ -1,11 +1,10 @@
-resource_group_name = {
-  default = "config-1-rg"
-}
+resource_group_name = "config-1-rg"
 
 network_security_groups = {
   nsg1_db = {
     name      = "nsg-1-db"
     rule_name = "nsg-db"
+    direction = "Inbound"
     protocol  = "Tcp"
     priority  = 1000
     dst_addr  = "*"
@@ -17,6 +16,7 @@ network_security_groups = {
   nsg2_backend = {
     name      = "nsg-2-backend"
     rule_name = "nsg-backend"
+    direction = "Inbound"
     protocol  = "Tcp"
     priority  = 1000
     dst_addr  = "*"
@@ -28,6 +28,7 @@ network_security_groups = {
   nsg3_frontend = {
     name      = "nsg-3-frontend"
     rule_name = "nsg-frontend"
+    direction = "Inbound"
     protocol  = "Tcp"
     priority  = 1000
     dst_addr  = "*"
