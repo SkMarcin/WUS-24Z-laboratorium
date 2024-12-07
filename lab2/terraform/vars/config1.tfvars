@@ -57,6 +57,10 @@ subnets = {
   }
 }
 
+public_ips = {
+  ["backend_ip", "frontend_ip"]
+}
+
 vms = {
   db_master = {
     subnet    = "subnet1_db"

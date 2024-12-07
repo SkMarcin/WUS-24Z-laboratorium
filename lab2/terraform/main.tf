@@ -48,6 +48,13 @@ resource "azurerm_public_ip" "public_ip" {
   allocation_method   = "Dynamic"
 }
 
+resource "azurerm_subnet_network_security_group_association" "subnet_nsg_association" {
+  for_each = var.subnets
+
+  subnet_id                 = azurerm_subnet.subnet[each.key].id
+  network_security_group_id = azurerm_network_security_group.nsg[each.value.nsg].id
+}
+
 resource "azurerm_network_interface" "nic" {
   for_each = var.vms
 
