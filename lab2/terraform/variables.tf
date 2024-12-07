@@ -33,7 +33,6 @@ variable "subnets" {
 
 variable "public_ips" {
   type    = list(string)
-  default = ["backend_ip", "frontend_ip"]
 }
 
 variable "vms" {

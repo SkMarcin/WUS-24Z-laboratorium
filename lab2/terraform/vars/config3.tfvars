@@ -43,19 +43,21 @@ subnets = {
   subnet1_db = {
     name       = "subnet-1-db"
     addr_pref  = "10.0.1.0/24"
-    nsg        = "nsg-1-db"
+    nsg        = "nsg1_db"
   }
   subnet2_backend = {
     name       = "subnet-2-backend"
     addr_pref  = "10.0.2.0/24"
-    nsg        = "nsg-2-backend"
+    nsg        = "nsg2_backend"
   }
   subnet3_frontend = {
     name       = "subnet-3-frontend"
     addr_pref  = "10.0.3.0/24"
-    nsg        = "nsg-3-frontend"
+    nsg        = "nsg3_frontend"
   }
 }
+
+public_ips = ["backend_ip", "frontend_ip"]
 
 vms = {
   db_master = {
