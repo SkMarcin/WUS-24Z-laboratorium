@@ -71,6 +71,17 @@ resource "azurerm_network_interface" "nic" {
   }
 }
 
+resource "tls_private_key" "example" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "local_file" "private_key" {
+  content           = azapi_resource_action.ssh_public_key_gen.output.privateKey
+  filename          = "${path.module}/generated_private_key.pem"
+  file_permission   = "0400"
+}
+
 resource "azurerm_linux_virtual_machine" "vm" {
   for_each = var.vms
 
@@ -82,7 +93,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   admin_ssh_key {
     username   = "Admin123"
-    public_key = azapi_resource_action.ssh_public_key_gen.output.publicKey
+    public_key = tls_private_key.ssh_public_key_gen.output.publicKey
   }
 
   os_disk {
@@ -100,3 +111,4 @@ resource "azurerm_linux_virtual_machine" "vm" {
   version   = "latest"
 }
 }
+
