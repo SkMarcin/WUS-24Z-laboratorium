@@ -53,7 +53,7 @@ subnets = {
   subnet3_frontend = {
     name       = "subnet-3-frontend-balancer"
     addr_pref  = "10.0.3.0/24"
-    nsg        = "nsg3_frontend-balancer"
+    nsg        = "nsg3_frontend"
   }
 }
 
