@@ -1,0 +1,14 @@
+- name: Deploy Database
+  hosts: db_group
+  roles:
+    - db_master
+
+- name: Deploy Backend
+  hosts: backend_group
+  roles:
+    - backend
+
+- name: Deploy Frontend
+  hosts: frontend_group
+  roles:
+    - frontend

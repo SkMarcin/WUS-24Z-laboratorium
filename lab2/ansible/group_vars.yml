@@ -1,0 +1,10 @@
+frontend_backend_ip: "<backend_ip>"
+frontend_backend_port: 9966
+frontend_port: 4200
+
+backend_port: 9966
+backend_db_ip: "<db_ip>"
+backend_db_port: 3306
+backend_folder_path: "/root/petclinic_backend"
+
+db_master_port: 3306

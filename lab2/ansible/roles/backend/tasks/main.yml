@@ -1,0 +1,45 @@
+- name: Update and upgrade system packages
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Install Java
+  ansible.builtin.apt:
+    name: openjdk-17-jdk
+    state: present
+
+- name: Clone backend repository
+  ansible.builtin.git:
+    repo: https://github.com/spring-petclinic/spring-petclinic-rest.git
+    dest: "{{ backend_folder_path }}/spring-petclinic-rest"
+
+- name: Update backend environment properties
+  ansible.builtin.replace:
+    path: "{{ backend_folder_path }}/spring-petclinic-rest/src/main/resources/application-mysql.properties"
+    regexp: "localhost"
+    replace: "{{ backend_db_ip }}"
+
+- name: Update database port
+  ansible.builtin.replace:
+    path: "{{ backend_folder_path }}/spring-petclinic-rest/src/main/resources/application-mysql.properties"
+    regexp: "3306"
+    replace: "{{ backend_db_port }}"
+
+- name: Update backend port
+  ansible.builtin.replace:
+    path: "{{ backend_folder_path }}/spring-petclinic-rest/src/main/resources/application.properties"
+    regexp: "9966"
+    replace: "{{ backend_port }}"
+
+- name: Enable MySQL as active profile
+  ansible.builtin.replace:
+    path: "{{ backend_folder_path }}/spring-petclinic-rest/src/main/resources/application.properties"
+    regexp: "active=hsqldb"
+    replace: "active=mysql"
+
+- name: Run Spring Boot backend
+  shell: |
+    cd {{ backend_folder_path }}/spring-petclinic-rest
+    ./mvnw spring-boot:run &
+  args:
+    executable: /bin/bash
