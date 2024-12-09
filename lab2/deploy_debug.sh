@@ -41,6 +41,7 @@ if [ -z "$ANSIBLE_IP" ]; then
 fi
 echo "Frontend public IP: $ANSIBLE_IP"
 
+ssh-keyscan $ANSIBLE_IP >> ~/.ssh/known_hosts
 # Transfer files to the frontend server
 echo "Transferring generated_key.pem to the frontend server..."
 scp -i generated_key.pem generated_key.pem Admin123@"$ANSIBLE_IP":/home/Admin123/.ssh/generated_key.pem

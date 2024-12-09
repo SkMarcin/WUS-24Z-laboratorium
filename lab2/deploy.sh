@@ -21,6 +21,7 @@ terraform apply "vars/config$CONFIG_NR.tfvars"
 
 ANSIBLE_IP=$(terraform output -raw ansible_public_ip)
 
+ssh-keyscan $ANSIBLE_IP >> ~/.ssh/known_hosts
 scp -i generated_key.pem generated_key.pem Admin123@"$ANSIBLE_IP":/home/Admin123/.ssh/generated_key.pem
 scp -i generated_key.pem -r ../ansible Admin123@"$ANSIBLE_IP":/home/Admin123/
 
