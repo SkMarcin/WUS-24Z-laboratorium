@@ -74,7 +74,7 @@ ssh -i generated_key.pem Admin123@"$ANSIBLE_IP" << EOF
   export ANSIBLE_HOST_KEY_CHECKING=False
 
   echo "Running Ansible playbook..."
-  ansible-playbook -i inventory$CONFIG_NR.yml playbook.yml -vv
+  ansible-playbook -i inventories/config$CONFIG_NR/inventory.yml playbook.yml -vv
 EOF
 
 echo "Deployment script completed successfully."
