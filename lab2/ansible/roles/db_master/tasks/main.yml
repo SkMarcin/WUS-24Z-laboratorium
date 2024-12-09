@@ -37,3 +37,29 @@
     mysql -e "FLUSH PRIVILEGES;"
   args:
     executable: /bin/bash
+
+- name: Download and prepare schema.sql
+  ansible.builtin.shell: |
+    wget -q https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-rest/refs/heads/master/src/main/resources/db/mysql/schema.sql -O /tmp/schema.sql
+    sed -i '1 i\USE petclinic;' /tmp/schema.sql  # Add 'USE petclinic;' to the top of schema.sql
+  args:
+    executable: /bin/bash
+
+- name: Populate database schema
+  ansible.builtin.shell: |
+    mysql -f < /tmp/schema.sql
+  args:
+    executable: /bin/bash
+
+- name: Download and prepare data.sql
+  ansible.builtin.shell: |
+    wget -q https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-rest/refs/heads/master/src/main/resources/db/mysql/data.sql -O /tmp/data.sql
+    sed -i '1 i\USE petclinic;' /tmp/data.sql  # Add 'USE petclinic;' to the top of data.sql
+  args:
+    executable: /bin/bash
+
+- name: Populate database data
+  ansible.builtin.shell: |
+    mysql -f < /tmp/data.sql
+  args:
+    executable: /bin/bash
