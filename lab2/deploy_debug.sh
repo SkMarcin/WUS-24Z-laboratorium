@@ -29,7 +29,6 @@ echo "Initializing Terraform..."
 terraform init
 
 echo "Applying Terraform configuration with vars/config$CONFIG_NR.tfvars..."
-terraform refresh
 terraform apply -var-file="vars/config$CONFIG_NR.tfvars" -auto-approve
 
 # Retrieve frontend public IP from Terraform output
