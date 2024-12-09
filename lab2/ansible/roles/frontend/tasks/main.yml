@@ -3,6 +3,14 @@
     update_cache: yes
     upgrade: dist
 
+- name: Install Node.js and npm
+  apt:
+    name:
+      - nodejs
+      - npm
+    state: present
+    update_cache: yes
+
 - name: Install NVM
   ansible.builtin.shell: |
     curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
