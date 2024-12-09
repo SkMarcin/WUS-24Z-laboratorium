@@ -51,7 +51,7 @@ scp -i generated_key.pem -r ../ansible Admin123@"$ANSIBLE_IP":/home/Admin123/
 
 # SSH into the frontend server
 echo "SSH into the frontend server to install Ansible..."
-ssh -i generated_key.pem Admin123@"$ANSIBLE_IP" << 'EOF'
+ssh -i generated_key.pem Admin123@"$ANSIBLE_IP" << EOF
   echo "Changing to the Ansible directory..."
   cd ansible || { echo "Failed to change directory to ansible"; exit 1; }
 
@@ -70,8 +70,11 @@ ssh -i generated_key.pem Admin123@"$ANSIBLE_IP" << 'EOF'
   echo "Installing Azure Ansible collection..."
   ansible-galaxy collection install azure.azcollection --force
 
+   echo "Testing connectivity to db_master..."
+  ansible db_group -i inventory$CONFIG_NR.yml -m ping -vvv || { echo "Ping failed"; exit 1; }
+
   echo "Running Ansible playbook..."
-  ansible-playbook -i inventory"$CONFIG_NR".yml site.yml
+  ansible-playbook -i inventory$CONFIG_NR.yml playbook.yml -vvv
 EOF
 
 echo "Deployment script completed successfully."
