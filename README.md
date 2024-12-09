@@ -1,5 +1,5 @@
 # WUS-24Z-laboratorium
-
+https://gitlab-stud.elka.pw.edu.pl/mdobrow2/wus-24z-laboratorium.git
 
 ## Lab2
 cd lab2/terraform\

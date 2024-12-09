@@ -1,3 +1,3 @@
-output "public_ips" {
-  value = azurerm_public_ip.public_ip
+output "ansible_public_ip" {
+  value = azurerm_public_ip.frontend_public_ip.ip_address
 }

@@ -1,5 +1,6 @@
 - name: Deploy Database
   hosts: db_group
+  become: true
   roles:
     - db_master
 

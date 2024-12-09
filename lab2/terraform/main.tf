@@ -79,7 +79,7 @@ resource "tls_private_key" "example" {
 resource "local_file" "private_key" {
   content           = tls_private_key.example.private_key_pem
   filename          = "${path.module}/generated_private_key.pem"
-  file_permission   = "0400"
+  file_permission   = "0600"
 }
 
 resource "azurerm_linux_virtual_machine" "vm" {
@@ -109,6 +109,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
   offer     = "ubuntu-24_04-lts"
   sku       = "server"
   version   = "latest"
-}
+  }
 }
 
