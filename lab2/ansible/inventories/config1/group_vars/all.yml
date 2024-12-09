@@ -1,5 +1,5 @@
 frontend_backend_ip: "<backend_ip>"
-frontend_backend_port: 
+frontend_backend_port: 8010
 frontend_port: 8000
 
 backend_port: 8010
