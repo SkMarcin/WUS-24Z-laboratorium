@@ -1,9 +1,9 @@
 data "azurerm_public_ip" "ansible_public_ip" {
   name                  = "frontend_ip"
-  resource_group_name   = "config-1-rg"
+  resource_group_name   = azurerm_resource_group.rg.name
 
   depends_on = [
-    azurerm_public_ip.public_ip["frontend_ip"]
+    azurerm_linux_virtual_machine.vm
   ]
 }
 
