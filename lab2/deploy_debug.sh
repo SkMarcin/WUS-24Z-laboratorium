@@ -31,9 +31,17 @@ terraform init
 echo "Applying Terraform configuration with vars/config$CONFIG_NR.tfvars..."
 terraform apply -var-file="vars/config$CONFIG_NR.tfvars" -auto-approve
 
-# Retrieve frontend public IP from Terraform output
-echo "Retrieving frontend public IP..."
-ANSIBLE_IP=$(terraform output -raw ansible_public_ip)
+# Wait for frontend public IP to become available
+echo "Waiting for frontend public IP..."
+for i in {1..10}; do
+  ANSIBLE_IP=$(terraform output -raw ansible_public_ip)
+  if [ -n "$ANSIBLE_IP" ]; then
+    echo "Frontend public IP: $ANSIBLE_IP"
+    break
+  fi
+  echo "Public IP not available yet. Retrying in 10 seconds..."
+  sleep 10
+done
 
 if [ -z "$ANSIBLE_IP" ]; then
   echo "Failed to retrieve frontend public IP from Terraform."
