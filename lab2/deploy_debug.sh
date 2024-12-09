@@ -5,7 +5,7 @@ echo "Starting the deployment script..."
 
 # Check if the argument is provided
 if [ -z "$1" ]; then
-  echo "Usage: $0 <inventory-file>"
+  echo "Usage: $0 <config-nr>"
   exit 1
 fi
 
@@ -33,7 +33,7 @@ terraform apply -var-file="vars/config$CONFIG_NR.tfvars" -auto-approve
 
 # Retrieve frontend public IP from Terraform output
 echo "Retrieving frontend public IP..."
-ANSIBLE_IP=$(terraform output -raw frontend_public_ip)
+ANSIBLE_IP=$(terraform output -raw ansible_public_ip)
 
 if [ -z "$ANSIBLE_IP" ]; then
   echo "Failed to retrieve frontend public IP from Terraform."

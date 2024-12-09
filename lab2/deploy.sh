@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-  echo "Usage: $0 <inventory-file>"
+  echo "Usage: $0 <config-nr>"
   exit 1
 fi
 
@@ -19,7 +19,7 @@ cd terraform
 terraform init
 terraform apply "vars/config$CONFIG_NR.tfvars"
 
-ANSIBLE_IP=$(terraform output -raw frontend_public_ip)
+ANSIBLE_IP=$(terraform output -raw ansible_public_ip)
 
 scp -i generated_key.pem generated_key.pem Admin123@"$ANSIBLE_IP":/home/Admin123/.ssh/generated_key.pem
 scp -i generated_key.pem -r ../ansible Admin123@"$ANSIBLE_IP":/home/Admin123/
