@@ -6,7 +6,7 @@ if [ -z "$1" ]; then
 fi
 
 CONFIG_NR=$1
-ANSIBLE_IP=$(terraform output -raw frontend_public_ip)
+
 
 if [[ "$CONFIG_NR" == "1" || "$CONFIG_NR" == "3" || "$CONFIG_NR" == "5" ]]; then
   echo "CONFIG_NR is valid: $CONFIG_NR"
@@ -18,6 +18,8 @@ fi
 cd terraform
 terraform init
 terraform apply "vars/config$CONFIG_NR.tfvars"
+
+ANSIBLE_IP=$(terraform output -raw frontend_public_ip)
 
 scp -i generated_key.pem generated_key.pem Admin123@"$ANSIBLE_IP":/home/Admin123/.ssh/generated_key.pem
 scp -i generated_key.pem -r ../ansible Admin123@"$ANSIBLE_IP":/home/Admin123/

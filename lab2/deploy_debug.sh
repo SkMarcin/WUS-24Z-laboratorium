@@ -11,16 +11,6 @@ fi
 
 CONFIG_NR=$1
 
-# Retrieve frontend public IP from Terraform output
-echo "Retrieving frontend public IP..."
-ANSIBLE_IP=$(terraform output -raw frontend_public_ip)
-
-if [ -z "$ANSIBLE_IP" ]; then
-  echo "Failed to retrieve frontend public IP from Terraform."
-  exit 1
-fi
-echo "Frontend public IP: $ANSIBLE_IP"
-
 # Validate CONFIG_NR
 echo "Validating CONFIG_NR..."
 if [[ "$CONFIG_NR" == "1" || "$CONFIG_NR" == "3" || "$CONFIG_NR" == "5" ]]; then
@@ -40,6 +30,16 @@ terraform init
 
 echo "Applying Terraform configuration with vars/config$CONFIG_NR.tfvars..."
 terraform apply -var-file="vars/config$CONFIG_NR.tfvars" -auto-approve
+
+# Retrieve frontend public IP from Terraform output
+echo "Retrieving frontend public IP..."
+ANSIBLE_IP=$(terraform output -raw frontend_public_ip)
+
+if [ -z "$ANSIBLE_IP" ]; then
+  echo "Failed to retrieve frontend public IP from Terraform."
+  exit 1
+fi
+echo "Frontend public IP: $ANSIBLE_IP"
 
 # Transfer files to the frontend server
 echo "Transferring generated_key.pem to the frontend server..."
