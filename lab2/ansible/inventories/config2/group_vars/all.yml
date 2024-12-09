@@ -1,7 +1,9 @@
 db_master_ip: 10.0.1.20
 db_master_port: 3306
+db_slave_port: 3307
 
 backend_folder_path: "/root/petclinic_backend"
-
 backend_port: 8010
+
 frontend_port: 8000
+

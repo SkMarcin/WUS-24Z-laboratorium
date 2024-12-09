@@ -4,6 +4,12 @@
   roles:
     - db_master
 
+- name: Deploy DB Slave
+  hosts: db_slave
+  become: true
+  roles:
+    - db_slave
+
 - name: Deploy Backend
   hosts: backend_group
   become: true

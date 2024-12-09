@@ -17,13 +17,13 @@
   ansible.builtin.replace:
     path: "{{ backend_folder_path }}/spring-petclinic-rest/src/main/resources/application-mysql.properties"
     regexp: "localhost"
-    replace: "{{ backend_db_ip }}"
+    replace: "{{ db_master_ip }}"
 
 - name: Update database port
   ansible.builtin.replace:
     path: "{{ backend_folder_path }}/spring-petclinic-rest/src/main/resources/application-mysql.properties"
     regexp: "3306"
-    replace: "{{ backend_db_port }}"
+    replace: "{{ db_master_port }}"
 
 - name: Update backend port
   ansible.builtin.replace:

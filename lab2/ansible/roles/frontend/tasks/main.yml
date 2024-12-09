@@ -35,7 +35,7 @@
   ansible.builtin.replace:
     path: "/root/spring-petclinic-angular/{{ item }}"
     regexp: "localhost"
-    replace: "{{ frontend_backend_ip }}"
+    replace: "{{ backend_ip }}"
   with_items:
     - src/environments/environment.prod.ts
     - src/environments/environment.ts
@@ -44,7 +44,7 @@
   ansible.builtin.replace:
     path: "/root/spring-petclinic-angular/{{ item }}"
     regexp: "9966"
-    replace: "{{ frontend_backend_port }}"
+    replace: "{{ backend_port }}"
   with_items:
     - src/environments/environment.prod.ts
     - src/environments/environment.ts
