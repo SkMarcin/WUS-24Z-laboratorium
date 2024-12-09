@@ -70,11 +70,10 @@ ssh -i generated_key.pem Admin123@"$ANSIBLE_IP" << EOF
   echo "Installing Azure Ansible collection..."
   ansible-galaxy collection install azure.azcollection --force
 
-   echo "Testing connectivity to db_master..."
-  ansible db_group -i inventory$CONFIG_NR.yml -m ping -vvv || { echo "Ping failed"; exit 1; }
+  export ANSIBLE_HOST_KEY_CHECKING=False
 
   echo "Running Ansible playbook..."
-  ansible-playbook -i inventory$CONFIG_NR.yml playbook.yml -vvv
+  ansible-playbook -i inventory$CONFIG_NR.yml playbook.yml -vv
 EOF
 
 echo "Deployment script completed successfully."
