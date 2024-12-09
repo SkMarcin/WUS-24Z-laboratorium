@@ -6,10 +6,12 @@
 
 - name: Deploy Backend
   hosts: backend_group
+  become: true
   roles:
     - backend
 
 - name: Deploy Frontend
   hosts: frontend_group
+  become: true
   roles:
     - frontend
