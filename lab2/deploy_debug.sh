@@ -32,8 +32,9 @@ echo "Applying Terraform configuration with vars/config$CONFIG_NR.tfvars..."
 terraform apply -var-file="vars/config$CONFIG_NR.tfvars" -auto-approve
 
 # Retrieve frontend public IP from Terraform output
-echo "Retrieving frontend public IP..."
+echo "Retrieving public IPs..."
 ANSIBLE_IP=$(terraform output -raw ansible_public_ip)
+BACKEND_IP=$(terraform output -raw backend_public_ip)
 
 if [ -z "$ANSIBLE_IP" ]; then
   echo "Failed to retrieve frontend public IP from Terraform."
@@ -71,6 +72,8 @@ ssh -i generated_key.pem Admin123@"$ANSIBLE_IP" << EOF
   ansible-galaxy collection install azure.azcollection --force
 
   export ANSIBLE_HOST_KEY_CHECKING=False
+
+  echo "frontend_backend_ip: $BACKEND_IP" >> inventories/config$CONFIG_NR/group_vars/all.yml
 
   echo "Running Ansible playbook..."
   ansible-playbook -i inventories/config$CONFIG_NR/inventory.yml playbook.yml -vv

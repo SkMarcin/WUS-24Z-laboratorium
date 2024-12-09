@@ -1,9 +1,8 @@
-frontend_backend_ip: "<backend_ip>"
 frontend_backend_port: 8010
 frontend_port: 8000
 
 backend_port: 8010
-backend_db_ip: "<db_ip>"
+backend_db_ip: 10.0.2.20
 backend_db_port: 3306
 backend_folder_path: "/root/petclinic_backend"
 
