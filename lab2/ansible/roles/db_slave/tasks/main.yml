@@ -43,7 +43,7 @@
 
 - name: Start MySQL Slave
   ansible.builtin.shell: |
-    mysql -v -e "CHANGE REPLICATION SOURCE TO SOURCE_HOST={{ db_master_ip }}, SOURCE_PORT={{ db_master_port }}, SOURCE_USER='replica_petclinic', SOURCE_PASSWORD='replica_petclinic';"
+    mysql -v -e "CHANGE REPLICATION SOURCE TO SOURCE_HOST='{{ db_master_ip }}', SOURCE_PORT={{ db_master_port }}, SOURCE_USER='replica_petclinic', SOURCE_PASSWORD='replica_petclinic';"
     mysql -v -e "START SLAVE;"
   args:
     executable: /bin/bash
