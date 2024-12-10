@@ -9,3 +9,4 @@ backend2_port: 8011
 
 nginx_port: 8001
 frontend_port: 8000
+backend_port: 8001 # nginx as backend
