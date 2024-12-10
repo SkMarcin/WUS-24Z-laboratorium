@@ -75,6 +75,7 @@ ssh -i generated_key.pem Admin123@"$ANSIBLE_IP" << EOF
   export ANSIBLE_HOST_KEY_CHECKING=False
 
   echo "backend_ip: $BACKEND_IP" >> inventories/config$CONFIG_NR/group_vars/all.yml
+  echo "frontend_ip: $ANSIBLE_IP" >> inventories/config$CONFIG_NR/group_vars/all.yml
 
   echo "Running Ansible playbook..."
   ansible-playbook -i inventories/config$CONFIG_NR/inventory.yml playbook.yml -vv

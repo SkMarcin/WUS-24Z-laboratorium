@@ -1,0 +1,24 @@
+- name: Install Nginx
+  become: true
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Set backend_ip to frontend_ip
+  ansible.builtin.set_fact:
+    backend_ip: "{{ frontend_ip }}"
+
+- name: Configure Nginx as Load Balancer
+  become: true
+  ansible.builtin.template:
+    src: load_balancer.j2
+    dest: /etc/nginx/sites-enabled/load_balancer
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Reload Nginx
+  become: true
+  ansible.builtin.shell:
+    cmd: nginx -s reload
