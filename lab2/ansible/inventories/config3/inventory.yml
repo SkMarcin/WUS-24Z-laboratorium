@@ -27,7 +27,10 @@ all:
       hosts:
         backend
 
-    db_group:
+    db_master_group:
       hosts:
         db_master
+
+    db_slave_group:
+      hosts:
         db_slave

@@ -1,11 +1,11 @@
 - name: Deploy Database
-  hosts: db_group
+  hosts: db_master_group
   become: true
   roles:
     - db_master
 
 - name: Deploy DB Slave
-  hosts: db_slave
+  hosts: db_slave_group
   become: true
   roles:
     - db_slave
