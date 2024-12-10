@@ -1,4 +1,10 @@
 all:
+  vars:
+    backend_instances:
+      - backend_folder_path: "/root/petclinic_backend1"
+        backend_port: 8010
+    deploy_multiple_backends: false
+    
   hosts:
     frontend:
       ansible_host: 10.0.3.20

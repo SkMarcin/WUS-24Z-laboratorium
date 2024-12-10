@@ -15,6 +15,7 @@
   become: true
   roles:
     - backend
+    - backend
 
 - name: Deploy Frontend
   hosts: frontend_group
