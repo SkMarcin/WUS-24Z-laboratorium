@@ -42,6 +42,7 @@ if [ -z "$ANSIBLE_IP" ]; then
 fi
 echo "Frontend public IP: $ANSIBLE_IP"
 
+touch ~/.ssh/known_hosts
 ssh-keyscan $ANSIBLE_IP >> ~/.ssh/known_hosts
 # Transfer files to the frontend server
 echo "Transferring generated_key.pem to the frontend server..."
@@ -73,7 +74,7 @@ ssh -i generated_key.pem Admin123@"$ANSIBLE_IP" << EOF
 
   export ANSIBLE_HOST_KEY_CHECKING=False
 
-  echo "frontend_backend_ip: $BACKEND_IP" >> inventories/config$CONFIG_NR/group_vars/all.yml
+  echo "backend_ip: $BACKEND_IP" >> inventories/config$CONFIG_NR/group_vars/all.yml
 
   echo "Running Ansible playbook..."
   ansible-playbook -i inventories/config$CONFIG_NR/inventory.yml playbook.yml -vv
