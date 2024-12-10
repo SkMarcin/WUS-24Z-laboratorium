@@ -9,6 +9,7 @@
   become: true
   roles:
     - db_slave
+      when: deploy_slave
 
 - name: Deploy Backend
   hosts: backend_group
@@ -16,10 +17,12 @@
   roles:
     - backend
     - backend
+      when: deploy_multiple_backends
 
 - name: Deploy Frontend
   hosts: frontend_group
   become: true
   roles:
     - nginx
+      when: deploy_nginx
     - frontend

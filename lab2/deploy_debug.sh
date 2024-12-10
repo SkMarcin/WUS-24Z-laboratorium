@@ -42,6 +42,7 @@ if [ -z "$ANSIBLE_IP" ]; then
 fi
 echo "Frontend public IP: $ANSIBLE_IP"
 
+mkdir -p ~/.ssh
 touch ~/.ssh/known_hosts
 ssh-keyscan $ANSIBLE_IP >> ~/.ssh/known_hosts
 # Transfer files to the frontend server

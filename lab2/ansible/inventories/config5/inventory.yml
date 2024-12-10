@@ -6,6 +6,8 @@ all:
       - backend_folder_path: "/root/petclinic_backend2"
         backend_port: 8011
     deploy_multiple_backends: true
+    deploy_nginx: true
+    deploy_slave: true
 
   hosts:
     frontend:
