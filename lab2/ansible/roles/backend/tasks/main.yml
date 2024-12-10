@@ -22,6 +22,7 @@
   ansible.builtin.git:
     repo: https://github.com/spring-petclinic/spring-petclinic-rest.git
     dest: "{{ item.backend_folder_path }}/spring-petclinic-rest"
+    force: yes
   with_items: "{{ active_backends }}"
 
 - name: Update backend environment properties
