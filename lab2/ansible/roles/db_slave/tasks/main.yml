@@ -26,45 +26,25 @@
     name: mysql
     state: restarted
 
-- name: Create MySQL user and database
-  become: true
-  ansible.builtin.mysql_db:
-    name: petclinic
-    state: present
-
-- name: Create MySQL user for replication
-  become: true
-  ansible.builtin.mysql_user:
-    name: petclinic
-    password: petclinic
-    host: "%"
-    state: present
-    priv: "petclinic.*:ALL"
-
-- name: Set up MySQL replication
-  become: true
-  ansible.builtin.mysql_replication:
-    mode: slave
-    master_host: "{{ db_master_ip }}"
-    master_port: "{{ db_master_port }}"
-    master_user: replica_petclinic
-    master_password: replica_petclinic
-    state: present
-
-- name: Download MySQL schema
-  become: true
-  ansible.builtin.get_url:
-    url: https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-rest/refs/heads/master/src/main/resources/db/mysql/schema.sql
-    dest: /root/schema.sql
-
-- name: Apply MySQL schema
-  become: true
+- name: Set up MySQL database and user
   ansible.builtin.shell: |
-    sed -i '1 i\USE petclinic;' /root/schema.sql
-    cat /root/schema.sql | mysql -u root -p
+    mysql -e "CREATE USER IF NOT EXISTS 'petclinic'@'%' IDENTIFIED BY 'petclinic';"
+    mysql -e "CREATE DATABASE IF NOT EXISTS petclinic;"
+    mysql -e "GRANT ALL PRIVILEGES ON petclinic.* TO 'petclinic'@'%' WITH GRANT OPTION;"
+  args:
+    executable: /bin/bash
+
+- name: Download and prepare schema.sql
+  ansible.builtin.shell: |
+    wget -q https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-rest/refs/heads/master/src/main/resources/db/mysql/schema.sql -O /tmp/schema.sql
+    sed -i '1 i\USE petclinic;' /tmp/schema.sql  # Add 'USE petclinic;' to the top of schema.sql
+  args:
+    executable: /bin/bash
 
 - name: Start MySQL Slave
   become: true
-  ansible.builtin.mysql_replication:
-    mode: slave
-    state: start
+  ansible.builtin.shell: |
+    sudo mysql -v -e "CHANGE REPLICATION SOURCE TO SOURCE_HOST='$master_address', SOURCE_PORT=$master_port, SOURCE_USER='replica_petclinic', SOURCE_PASSWORD='replica_petclinic';"
+    sudo mysql -v -e "START SLAVE;"
+  args:
+    executable: /bin/bash
