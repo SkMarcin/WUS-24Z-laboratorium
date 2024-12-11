@@ -1,0 +1,49 @@
+---
+- name: Install MySQL Server
+  become: true
+  ansible.builtin.apt:
+    name: mysql-server
+    state: present
+    update_cache: yes
+
+- name: Update MySQL configuration for db_slave
+  become: true
+  ansible.builtin.lineinfile:
+    path: /etc/mysql/my.cnf
+    line: "{{ item }}"
+    create: yes
+  with_items:
+    - "[mysqld]"
+    - "port={{ db_slave_port }}"
+    - "bind-address = 0.0.0.0"
+    - "server-id = 2"
+    - "read_only = 1"
+    - "log_bin = /var/log/mysql/mysql-bin.log"
+
+- name: Restart MySQL service
+  become: true
+  ansible.builtin.service:
+    name: mysql
+    state: restarted
+
+- name: Set up MySQL database and user
+  ansible.builtin.shell: |
+    mysql -e "CREATE USER IF NOT EXISTS 'petclinic'@'%' IDENTIFIED BY 'petclinic';"
+    mysql -e "CREATE DATABASE IF NOT EXISTS petclinic;"
+    mysql -e "GRANT ALL PRIVILEGES ON petclinic.* TO 'petclinic'@'%' WITH GRANT OPTION;"
+  args:
+    executable: /bin/bash
+
+- name: Download and prepare schema.sql
+  ansible.builtin.shell: |
+    wget -q https://raw.githubusercontent.com/spring-petclinic/spring-petclinic-rest/refs/heads/master/src/main/resources/db/mysql/schema.sql -O /tmp/schema.sql
+    sed -i '1 i\USE petclinic;' /tmp/schema.sql  # Add 'USE petclinic;' to the top of schema.sql
+  args:
+    executable: /bin/bash
+
+- name: Start MySQL Slave
+  ansible.builtin.shell: |
+    mysql -v -e "CHANGE REPLICATION SOURCE TO SOURCE_HOST='{{ db_master_ip }}', SOURCE_PORT={{ db_master_port }}, SOURCE_USER='replica_petclinic', SOURCE_PASSWORD='replica_petclinic';"
+    mysql -v -e "START SLAVE;"
+  args:
+    executable: /bin/bash

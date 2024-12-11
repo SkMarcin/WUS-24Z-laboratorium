@@ -1,0 +1,62 @@
+- name: Filter backend instances based on configuration
+  set_fact:
+    active_backends: "{{ backend_instances if deploy_multiple_backends else [backend_instances[0]] }}"
+
+- name: Prepare Backend Directories
+  ansible.builtin.file:
+    path: "{{ item.backend_folder_path }}"
+    state: directory
+  with_items: "{{ active_backends }}"
+
+- name: Update and upgrade system packages
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Install Java
+  ansible.builtin.apt:
+    name: openjdk-17-jdk
+    state: present
+
+- name: Clone backend repository
+  ansible.builtin.git:
+    repo: https://github.com/spring-petclinic/spring-petclinic-rest.git
+    dest: "{{ item.backend_folder_path }}/spring-petclinic-rest"
+    force: yes
+  with_items: "{{ active_backends }}"
+
+- name: Update backend environment properties
+  ansible.builtin.replace:
+    path: "{{ item.backend_folder_path }}/spring-petclinic-rest/src/main/resources/application-mysql.properties"
+    regexp: "localhost"
+    replace: "{{ db_master_ip }}"
+  with_items: "{{ active_backends }}"
+
+- name: Update database port
+  ansible.builtin.replace:
+    path: "{{ item.backend_folder_path }}/spring-petclinic-rest/src/main/resources/application-mysql.properties"
+    regexp: "3306"
+    replace: "{{ db_master_port }}"
+  with_items: "{{ active_backends }}"
+
+- name: Update backend port
+  ansible.builtin.replace:
+    path: "{{ item.backend_folder_path }}/spring-petclinic-rest/src/main/resources/application.properties"
+    regexp: "9966"
+    replace: "{{ item.backend_port }}"
+  with_items: "{{ active_backends }}"
+
+- name: Enable MySQL as active profile
+  ansible.builtin.replace:
+    path: "{{ item.backend_folder_path }}/spring-petclinic-rest/src/main/resources/application.properties"
+    regexp: "active=hsqldb"
+    replace: "active=mysql"
+  with_items: "{{ active_backends }}"
+
+- name: Run Spring Boot backend
+  shell: |
+    cd {{ item.backend_folder_path }}/spring-petclinic-rest
+    ./mvnw spring-boot:run &
+  args:
+    executable: /bin/bash
+  with_items: "{{ active_backends }}"

@@ -1,0 +1,28 @@
+- name: Deploy Database
+  hosts: db_master_group
+  become: true
+  roles:
+    - role: db_master
+
+- name: Deploy DB Slave
+  hosts: db_slave_group
+  become: true
+  roles:
+    - role: db_slave
+      when: deploy_slave
+
+- name: Deploy Backend
+  hosts: backend_group
+  become: true
+  roles:
+    - role: backend
+    - role: backend
+      when: deploy_multiple_backends
+
+- name: Deploy Frontend
+  hosts: frontend_group
+  become: true
+  roles:
+    - role: nginx
+      when: deploy_nginx
+    - role: frontend

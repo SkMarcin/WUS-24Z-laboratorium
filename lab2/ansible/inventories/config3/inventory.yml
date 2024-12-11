@@ -1,0 +1,44 @@
+all:
+  vars:
+    backend_instances:
+      - backend_folder_path: "/root/petclinic_backend1"
+        backend_port: 8010
+    deploy_multiple_backends: false
+    deploy_nginx: false
+    deploy_slave: true
+
+  hosts:
+    frontend:
+      ansible_host: 10.0.3.20
+      ansible_user: Admin123
+      ansible_ssh_private_key_file:  ~/.ssh/generated_key.pem
+    backend:
+      ansible_host: 10.0.2.20
+      ansible_user: Admin123
+      ansible_ssh_private_key_file:  ~/.ssh/generated_key.pem
+    db_master:
+      ansible_host: 10.0.1.20
+      ansible_user: Admin123
+      ansible_ssh_private_key_file:  ~/.ssh/generated_key.pem
+    db_slave:
+      ansible_host: 10.0.1.21
+      ansible_user: Admin123
+      ansible_ssh_private_key_file:  ~/.ssh/generated_key.pem
+
+
+  children:
+    frontend_group:
+      hosts:
+        frontend
+
+    backend_group:
+      hosts:
+        backend
+
+    db_master_group:
+      hosts:
+        db_master
+
+    db_slave_group:
+      hosts:
+        db_slave
