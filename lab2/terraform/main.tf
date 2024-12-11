@@ -12,7 +12,7 @@ resource "azurerm_network_security_group" "nsg" {
 }
 
 resource "azurerm_network_security_rule" "rule" {
-  for_each = var.network_security_rule
+  for_each = var.network_security_rules
 
   name                        = each.value.rule_name
   direction                   = each.value.direction
