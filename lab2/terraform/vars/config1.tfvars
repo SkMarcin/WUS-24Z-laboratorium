@@ -2,42 +2,91 @@ resource_group_name = "config-1-rg"
 
 network_security_groups = {
   nsg1_db = {
-    name      = "nsg-1-db"
-    rule_name = "nsg-db"
-    direction = "Inbound"
-    protocol  = "Tcp"
-    priority  = 1000
-    dst_addr  = "*"
-    dst_port  = "22-3306"
-    src_addr  = "10.0.0.0/16"
-    src_port  = "*"
-    access    = "Allow"
+    name  = "nsg-1-db"
   }
   nsg2_backend = {
-    name      = "nsg-2-backend"
-    rule_name = "nsg-backend"
-    direction = "Inbound"
-    protocol  = "Tcp"
-    priority  = 1000
-    dst_addr  = "*"
-    dst_port  = "22-8010"
-    src_addr  = "*"
-    src_port  = "*"
-    access    = "Allow"
+    name  = "nsg-2-backend"
   }
   nsg3_frontend = {
-    name      = "nsg-3-frontend"
-    rule_name = "nsg-frontend"
-    direction = "Inbound"
-    protocol  = "Tcp"
-    priority  = 1000
-    dst_addr  = "*"
-    dst_port  = "22-8000"
-    src_addr  = "*"
-    src_port  = "*"
-    access    = "Allow"
+    name  = "nsg-3-frontend"
   }
 }
+
+network_security_rules = {
+  ssh_rule_db = {
+    rule_name  = "ssh-rule-db"
+    direction  = "Inbound"
+    protocol   = "Tcp"
+    priority   = 1000
+    dst_addr   = "*"
+    dst_port   = "22"
+    src_addr   = "10.0.0.0/16"
+    src_port   = "*"
+    access     = "Allow"
+    nsg        = "nsg1_db"
+  }
+  db_rule = {
+    rule_name  = "db-rule"
+    direction  = "Inbound"
+    protocol   = "Tcp"
+    priority   = 1001
+    dst_addr   = "*"
+    dst_port   = "3306"
+    src_addr   = "10.0.0.0/16"
+    src_port   = "*"
+    access     = "Allow"
+    nsg        = "nsg1_db"
+  }
+  ssh_rule_backend = {
+    rule_name  = "ssh-rule-backend"
+    direction  = "Inbound"
+    protocol   = "Tcp"
+    priority   = 1000
+    dst_addr   = "*"
+    dst_port   = "22"
+    src_addr   = "*"
+    src_port   = "*"
+    access     = "Allow"
+    nsg        = "nsg2_backend"
+  }
+  backend_rule = {
+    rule_name  = "backend-rule"
+    direction  = "Inbound"
+    protocol   = "Tcp"
+    priority   = 1001
+    dst_addr   = "*"
+    dst_port   = "8010"
+    src_addr   = "*"
+    src_port   = "*"
+    access     = "Allow"
+    nsg        = "nsg2_backend"
+  }
+  ssh_rule_frontend = {
+    rule_name  = "ssh-rule-frontend"
+    direction  = "Inbound"
+    protocol   = "Tcp"
+    priority   = 1000
+    dst_addr   = "*"
+    dst_port   = "22"
+    src_addr   = "*"
+    src_port   = "*"
+    access     = "Allow"
+    nsg        = "nsg3_frontend"
+  }
+  frontend_rule = {
+    rule_name  = "frontend-rule"
+    direction  = "Inbound"
+    protocol   = "Tcp"
+    priority   = 1001
+    dst_addr   = "*"
+    dst_port   = "8000"
+    src_addr   = "*"
+    src_port   = "*"
+    access     = "Allow"
+    nsg        = "nsg3_frontend"
+  }
+}
+
 
 subnets = {
   subnet1_db = {

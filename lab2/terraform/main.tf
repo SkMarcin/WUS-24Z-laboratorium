@@ -9,23 +9,27 @@ resource "azurerm_network_security_group" "nsg" {
   name                = each.value.name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
+}
 
-  security_rule {
-    name                       = each.value.rule_name
-    direction                  = each.value.direction
-    protocol                   = each.value.protocol
-    priority                   = each.value.priority
-    destination_address_prefix = each.value.dst_addr
-    destination_port_range     = each.value.dst_port
-    source_address_prefix      = each.value.src_addr
-    source_port_range          = each.value.src_port
-    access                     = each.value.access
-  }
+resource "azurerm_network_security_rule" "rule" {
+  for_each = var.network_security_rules
+
+  name                        = each.value.rule_name
+  direction                   = each.value.direction
+  protocol                    = each.value.protocol
+  priority                    = each.value.priority
+  destination_address_prefix  = each.value.dst_addr
+  destination_port_range      = each.value.dst_port
+  source_address_prefix       = each.value.src_addr
+  source_port_range           = each.value.src_port
+  access                      = each.value.access
+  resource_group_name         = azurerm_resource_group.rg.name
+  network_security_group_name = azurerm_network_security_group.nsg[each.value.nsg].name
 }
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "config-1-vnet"
-  location            = var.location
+  location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   address_space       = ["10.0.0.0/16"]
 }

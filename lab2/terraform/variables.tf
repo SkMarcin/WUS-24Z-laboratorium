@@ -11,6 +11,11 @@ variable "resource_group_name" {
 variable "network_security_groups" {
   type = map(object({
     name       = string
+  }))
+}
+
+variable  "network_security_rules" {
+  type = map(object({
     rule_name  = string
     direction  = string
     protocol   = string
@@ -20,6 +25,7 @@ variable "network_security_groups" {
     src_addr   = string
     src_port   = string
     access     = string
+    nsg        = string
   }))
 }
 
