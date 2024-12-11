@@ -12,7 +12,7 @@ network_security_groups = {
   }
 }
 
-network_security_rule = {
+network_security_rules = {
   ssh_rule_db = {
     rule_name  = "ssh-rule-db"
     direction  = "Inbound"
